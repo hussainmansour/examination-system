@@ -205,12 +205,31 @@ The system uses the following main tables:
 
 For complete schema, see `database-schema.sql`.
 
-## 🖼️ Screenshots
+Made with ❤️ by 
 
-<p align="center">
-<img src="./public/screenshots/login.png" alt="Login page" width="320" />
-<img src="./public/screenshots/dashboard.png" alt="Dashboard" width="320" />
-<img src="./public/screenshots/exam.png" alt="Exam interface" width="320" />
-<img src="./public/screenshots/exam_submission.png" alt="Exam Submission" width="320" />
-<img src="./public/screenshots/dashboard2.png" alt="Dashboard" width="320" />
-</p>
+Hussien Mohamed 
+
+Marwan Essam 
+
+Mariam AlaaEldin 
+
+Omar Tammam 
+
+Rana Alaa 
+
+Sohaila Esmat 
+ 
+## 🖼️ Screenshots
+<table>
+<tr>
+<td><img src="./public/screenshots/login.png" alt="Login page" width="360" /></td>
+<td><img src="./public/screenshots/dashboard.png" alt="Dashboard" width="360" /></td>
+</tr>
+<tr>
+<td><img src="./public/screenshots/exam.png" alt="Exam interface" width="360" /></td>
+<td><img src="./public/screenshots/exam_submission.png" alt="Result" width="360" /></td>
+</tr>
+  <tr>
+<td><img src="./public/screenshots/dashboard2.png" alt="Exam interface" width="360" /></td>
+</tr>
+</table>
