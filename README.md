@@ -207,15 +207,15 @@ For complete schema, see `database-schema.sql`.
 
 Made with ❤️ by 
 
-Hussien Mohamed 
-
-Marwan Essam 
+Rana Alaa   
 
 Mariam AlaaEldin 
 
 Omar Tammam 
 
-Rana Alaa 
+Hussien Mohamed
+
+Marwan Essam
 
 Sohaila Esmat 
  
