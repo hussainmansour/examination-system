@@ -1,0 +1,136 @@
+-- Active: 1765720541948@@127.0.0.1@1433@master
+CREATE DATABASE Examination_System;
+
+USE Examination_System;
+-- 1. BRANCH Table
+CREATE TABLE BRANCH
+(
+Branch_Id VARCHAR(20) PRIMARY KEY,
+Branch_Address VARCHAR(30)
+);
+-- 2. TRACK Table
+CREATE TABLE TRACK
+(
+Track_Id VARCHAR(2) PRIMARY KEY,
+Track_Name VARCHAR(80) NOT NULL,
+Branch_Id VARCHAR(20) NOT NULL,
+FOREIGN KEY (Branch_Id) REFERENCES BRANCH(Branch_Id)
+);
+-- 3. STUDENT Table
+CREATE TABLE STUDENT
+(
+Student_Id INT IDENTITY(1,1) PRIMARY KEY,
+Student_Fname VARCHAR(20) NOT NULL,
+Student_Lname VARCHAR(20) NOT NULL,
+Student_Email VARCHAR(40) UNIQUE,
+Student_Password VARBINARY(32) NOT NULL,
+Student_BD DATE,
+Student_Phone CHAR(11) UNIQUE,
+Track_Id VARCHAR(2) NOT NULL,
+FOREIGN KEY (Track_Id) REFERENCES TRACK(Track_Id)
+);
+-- 4. INSTRUCTOR Table
+CREATE TABLE INSTRUCTOR
+(
+Instructor_Id INT IDENTITY(1,1) PRIMARY KEY,
+Instructor_Fname VARCHAR(20) NOT NULL,
+Instructor_Lname VARCHAR(20) NOT NULL,
+Instructor_Email VARCHAR(40) UNIQUE,
+Instructor_Phone CHAR(11) UNIQUE,
+Instructor_Salary INT
+);
+-- 5. COURSE Table
+CREATE TABLE COURSE
+(
+Course_Id INT IDENTITY(100,100) PRIMARY KEY,
+Course_Name VARCHAR(30),
+Course_Description TEXT,
+Track_Id VARCHAR(2) NOT NULL,
+FOREIGN KEY (Track_Id) REFERENCES TRACK(Track_Id)
+);
+-- 6. INSTRUCTOR_COURSE (Junction Table)
+CREATE TABLE INSTRUCTOR_COURSE
+(
+Instructor_Id INT,
+Course_Id INT,
+PRIMARY KEY(Instructor_Id, Course_Id),
+FOREIGN KEY (Instructor_Id) REFERENCES INSTRUCTOR(Instructor_Id),
+FOREIGN KEY (Course_Id) REFERENCES COURSE(Course_Id)
+);
+-- 7. TOPICS Table
+CREATE TABLE TOPICS
+(
+Topic_Id INT IDENTITY(1,1),
+Topic_Name VARCHAR(30),
+Course_Id INT,
+PRIMARY KEY (Course_Id, Topic_Id),
+FOREIGN KEY(Course_Id) REFERENCES COURSE(Course_Id) ON DELETE CASCADE
+);
+-- 8. QUESTIONS Table
+CREATE TABLE QUESTIONS
+(
+Question_Id INT IDENTITY(1,1) PRIMARY KEY,
+Question_Type VARCHAR(5) NOT NULL,
+Question_Body NVARCHAR(500) UNIQUE,
+Question_Weight INT NOT NULL,
+Question_Model_Answer VARCHAR(5) NOT NULL,
+Course_Id INT NOT NULL,
+FOREIGN KEY (Course_Id) REFERENCES COURSE(Course_Id),
+CHECK (Question_Type IN ('MCQ', 'TF')),
+CHECK (Question_Weight > 0)
+);
+-- 9. CHOICES Table
+CREATE TABLE CHOICES
+(
+Choice_Label CHAR(1),
+Question_Id INT,
+Choice_Body NVARCHAR(500) NOT NULL,
+PRIMARY KEY(Question_Id, Choice_Label),
+FOREIGN KEY (Question_Id) REFERENCES QUESTIONS(Question_Id) ON 
+DELETE CASCADE
+);
+-- 10. EXAMS Table
+CREATE TABLE EXAMS
+(
+Exam_Id INT IDENTITY(1,1) PRIMARY KEY,
+Exam_Total_Grade INT DEFAULT 100,
+Course_Id INT NOT NULL,
+Exam_Start_Time DATETIME NOT NULL,
+Exam_End_Time DATETIME NOT NULL,
+FOREIGN KEY (Course_Id) REFERENCES COURSE(Course_Id)
+);
+-- 11. EXAM_QUESTIONS Table
+CREATE TABLE EXAM_QUESTIONS
+(
+Exam_Id INT,
+Question_Id INT,
+Question_Order INT NOT NULL,
+UNIQUE(Exam_Id, Question_Order),
+PRIMARY KEY(Exam_Id, Question_Id),
+FOREIGN KEY(Exam_Id) REFERENCES EXAMS(Exam_Id) ON DELETE CASCADE,
+FOREIGN KEY(Question_Id) REFERENCES QUESTIONS(Question_Id)
+);
+-- 12. STUDENT_EXAM Table
+CREATE TABLE STUDENT_EXAM
+(
+Student_Id INT,
+Exam_Id INT,
+Student_Exam_Achieved_Grade INT DEFAULT 0,
+Submission_Time DATETIME,
+PRIMARY KEY(Student_Id, Exam_Id),
+FOREIGN KEY(Student_Id) REFERENCES STUDENT(Student_Id),
+FOREIGN KEY(Exam_Id) REFERENCES EXAMS(Exam_Id)
+);
+-- 13. STUDENT_ANSWERS Table
+CREATE TABLE STUDENT_ANSWERS
+(
+Student_Id INT,
+Exam_Id INT,
+Question_Id INT,
+Student_Answer VARCHAR(5),
+PRIMARY KEY(Student_Id, Exam_Id, Question_Id),
+FOREIGN KEY(Student_Id, Exam_Id) REFERENCES STUDENT_EXAM
+(Student_Id, Exam_Id),
+FOREIGN KEY(Exam_Id, Question_Id) REFERENCES EXAM_QUESTIONS
+(Exam_Id, Question_Id)
+);
